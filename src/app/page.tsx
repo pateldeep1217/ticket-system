@@ -1,4 +1,4 @@
-"use client"
+
 
 import { Login } from "./Login";
 
@@ -11,9 +11,13 @@ type LoginPageProps = {
   searchParams: SearchParams;
 };
 
-export default function LoginPage({searchParams}: LoginPageProps) {
+export default async function LoginPage({searchParams}: LoginPageProps) {
+  const resolvedSearchParams = await searchParams;
   
+  const wantsMagicLink = resolvedSearchParams.magicLink === "yes";
+
+
   return (
-    <Login/>
+    <Login isPasswordLogin={!wantsMagicLink}/>
   );
 }
