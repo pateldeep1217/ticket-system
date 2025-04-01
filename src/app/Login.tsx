@@ -1,34 +1,53 @@
 "use client";
 
-import { useRef } from "react";
+import React, { useRef } from "react";
 import Link from "next/link";
+import { getSupabaseBrowserClient } from "@/supabase-utils/BrowserClient";
+import { useRouter } from "next/navigation";
 
 // Define props interface for Login component
 interface LoginProps {
   isPasswordLogin: boolean;
 }
 
-
-
 export const Login = ({ isPasswordLogin }: LoginProps) => {
   // Specify that these refs are for input elements
   const emailInputRef = useRef<HTMLInputElement>(null);
   const passwordInputRef = useRef<HTMLInputElement>(null);
-
+  const supabase = getSupabaseBrowserClient();
+  const router = useRouter();
+  //onsubmit
+  const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (isPasswordLogin) {
+      supabase.auth
+        .signInWithPassword({
+          email: emailInputRef.current!.value,
+          password: passwordInputRef.current!.value,
+        })
+        .then((result) => {
+          if (result.data?.user) {
+            router.push("/tickets");
+          } else {
+            alert("Could not sign in");
+          }
+        });
+    }
+  };
   return (
-    <form>
+    <form onSubmit={onSubmit}>
       <article style={{ maxWidth: "480px", margin: "auto" }}>
         <header>Login</header>
-        
+
         <fieldset>
           <label htmlFor="email">
             Email
-            <input 
+            <input
               ref={emailInputRef}
               type="email"
               id="email"
               name="email"
-              required 
+              required
             />
           </label>
 

@@ -1,7 +1,11 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextRequest, NextResponse } from "next/server";
 
-export const getSupabaseReqResClient = ({ request } : {request: NextRequest}) => {
+export const getSupabaseReqResClient = ({
+  request,
+}: {
+  request: NextRequest;
+}) => {
   const response = {
     value: NextResponse.next({ request: request }),
   };
